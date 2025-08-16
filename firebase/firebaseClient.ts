@@ -1,7 +1,7 @@
 // firebase/firebaseClient.ts
 import { initializeApp, getApp, getApps } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getAuth, type Auth } from "firebase/auth";
+import { getFirestore, type Firestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -13,7 +13,18 @@ const firebaseConfig = {
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
 };
 
-const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+let authInstance: Auth;
+let dbInstance: Firestore;
 
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+if (typeof window !== "undefined") {
+  const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+  authInstance = getAuth(app);
+  dbInstance = getFirestore(app);
+} else {
+  // Server/SSR build: export placeholders to avoid initializing Firebase
+  authInstance = undefined as unknown as Auth;
+  dbInstance = undefined as unknown as Firestore;
+}
+
+export const auth = authInstance;
+export const db = dbInstance;
