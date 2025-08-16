@@ -1,4 +1,4 @@
-// app/meals/page.tsx
+
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import { fetchMeals, type Meal } from "@/lib/api/mealdb";
@@ -6,8 +6,6 @@ import { MealCard } from "@/components/MealCard";
 import { Input } from "@/components/ui/input"; // Shadcn
 import { useDebounce } from "@/hooks/useDebounce";
 import { useState } from "react";
-
-// Meal type imported from lib/api/mealdb
 
 export default function MealsPage() {
   const [search, setSearch] = useState<string>("");

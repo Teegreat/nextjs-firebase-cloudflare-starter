@@ -13,13 +13,21 @@ export const MealCard = ({ meal }: MealCardProps) => {
   const { addFavorite, removeFavorite, isFavorite } = useFavorites();
   const favorited = isFavorite(meal.idMeal);
 
-  const toggleFavorite = () => {
-    if (favorited) {
-      removeFavorite(meal.idMeal);
-      toast.success("Removed from favorites");
-    } else {
-      addFavorite(meal.idMeal);
-      toast.success("Added to favorites");
+  const toggleFavorite = async () => {
+    try {
+      if (favorited) {
+        await removeFavorite(meal.idMeal);
+        toast.success("Removed from favorites");
+      } else {
+        await addFavorite({
+          mealId: meal.idMeal,
+          title: meal.strMeal,
+          image: meal.strMealThumb,
+        });
+        toast.success("Added to favorites");
+      }
+    } catch (err) {
+      toast.error("Action failed. Please try again.");
     }
   };
 

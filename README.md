@@ -1,13 +1,16 @@
-Next.js + Firebase client-only starter, optimized for Cloudflare Pages and external API access.
+Next.js + Firebase client-only starter for Cloudflare Pages. Includes patterns for calling public APIs and a separate Node backend with Firebase ID token auth.
+
+![App screenshot](public/screenshot.png)
 
 ## 1) What you get
 
 - Client-only Firebase Auth (no Admin SDK, Cloudflare Workers friendly)
 - Zustand store with user profile sync from Firestore
+- TanStack Query (React Query) for data fetching, caching, and mutations
 - Client-side route gating in `app/(root)/_layout.tsx` and `app/(auth)/_layout.tsx`
 - Cloudflare Pages build via `@cloudflare/next-on-pages`
 
-## 2) Environment variables
+## 2) Environment variables (copy to Pages → Settings → Environment)
 
 Create `.env.local` for local dev (Node), and set the same keys in Cloudflare Pages → Settings → Environment variables for both Production and Preview.
 
@@ -21,7 +24,7 @@ NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=...
 NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=...
 
 # Optional: public backend base URL for your own API
-NEXT_PUBLIC_API_URL=https://api.example.com
+NEXT_PUBLIC_BACKEND_URL=https://your-backend.example.com
 ```
 
 Notes:
@@ -29,7 +32,7 @@ Notes:
 - These are browser-exposed values (NEXT*PUBLIC*\*). Copy them from Firebase Console → Project settings → Your apps (Web).
 - After your first deployment (when you have the actual URLs), go to Firebase Authentication → Settings → Authorized domains and add your deployed domain(s): the `*.pages.dev` URL shown in the Pages deployment, and any custom domain you attach.
 
-## 3) Local workflows
+## 3) Local workflows (dev & Pages preview)
 
 ```
 npm run dev           # Next.js dev (fastest)
@@ -96,10 +99,29 @@ service cloud.firestore {
 }
 ```
 
-## 6) Calling external APIs
+## 6) Calling your backend
 
-- If no secrets are needed, call them directly from the browser using `NEXT_PUBLIC_API_URL`.
-- If secrets are needed (API keys), add a Next.js Route Handler under `app/api/*/route.ts` and call the external API from the server using `fetch`. Read secrets from Cloudflare Pages env vars that DO NOT use `NEXT_PUBLIC_` prefix.
+- This boilerplate is set up to call a separate backend that verifies Firebase ID tokens.
+- Configure your backend URL in `NEXT_PUBLIC_BACKEND_URL`.
+
+Key files:
+
+- `lib/api/backend.ts`: attaches `Authorization: Bearer <idToken>` and calls your backend
+- `hooks/useFavorites.ts`: TanStack Query hooks for favorites (GET/POST/DELETE)
+- `components/MealCard.tsx`: UI that calls the hooks and shows toasts
+
+Endpoints expected by the client:
+
+- `GET  /favorites/:uid` → returns `{ success, message, data: string[] | { mealId: string }[] }`
+- `POST /favorites` body `{ mealId, title, image }`
+- `DELETE /favorites/:mealId`
+
+If your backend returns objects, ensure the client maps to IDs. See `lib/api/backend.ts`.
+
+### Example Node.js server (Express + Firebase Admin)
+
+- Boilerplate repository: [boilerplate-firebase-server-nodejs](https://github.com/Teegreat/boilerplate-firebase-server-nodejs)
+- Includes matching favorites routes and Firebase ID token verification so you can clone and test quickly.
 
 ## 7) Troubleshooting
 
