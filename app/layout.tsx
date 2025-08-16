@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import UserInit from "@/components/UserInit";
+import ReactQueryProvider from "@/components/ReactQueryProvider";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -24,9 +25,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${poppins.variable} antialiased pattern`}>
-        <UserInit />
-        {children}
-        <Toaster />
+        <ReactQueryProvider>
+          <UserInit />
+          {children}
+          <Toaster />
+        </ReactQueryProvider>
       </body>
     </html>
   );

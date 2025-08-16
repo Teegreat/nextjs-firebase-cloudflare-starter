@@ -134,3 +134,9 @@ export async function isAuthenticated(): Promise<boolean> {
   const user = getCurrentUser();
   return !!user;
 }
+
+export const getIdToken = async () => {
+  const user = auth.currentUser;
+  if (user) return user.getIdToken();
+  throw new Error("User not authenticated");
+};

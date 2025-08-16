@@ -36,8 +36,9 @@ export default function HomePage() {
                     {user?.email ?? "—"}
                   </p>
                 </div>
-                <div className="mt-4">
+                <div className="mt-4 flex gap-3">
                   <SignOutButton />
+                  <TestApiButton />
                 </div>
               </div>
             </div>
@@ -68,5 +69,13 @@ function SignOutButton() {
     <Button className="btn" onClick={() => signOut()}>
       Sign out
     </Button>
+  );
+}
+
+function TestApiButton() {
+  return (
+    <Link href="/meals" className="btn px-4 py-2 border rounded-md">
+      Test API
+    </Link>
   );
 }
