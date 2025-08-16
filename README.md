@@ -2,6 +2,10 @@ Next.js + Firebase client-only starter for Cloudflare Pages. Includes patterns f
 
 ![App screenshot](public/screenshot.png)
 
+## Demo
+
+Live demo: https://nextjs-firebase-cloudflare-starter.pages.dev/
+
 ## 1) What you get
 
 - Client-only Firebase Auth (no Admin SDK, Cloudflare Workers friendly)
