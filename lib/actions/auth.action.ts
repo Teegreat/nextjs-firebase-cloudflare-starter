@@ -7,7 +7,13 @@ import {
   signInWithEmailAndPassword,
   User,
 } from "firebase/auth";
-import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  serverTimestamp,
+  Timestamp,
+} from "firebase/firestore";
 
 export type SignUpParams = { name: string; email: string; password: string };
 export type SignInParams = { email: string; password: string };
@@ -21,8 +27,8 @@ export type AppUser = {
   name: string | null;
   email: string | null;
   photoURL: string | null;
-  createdAt?: any;
-  lastLoginAt?: any;
+  createdAt?: Timestamp | null;
+  lastLoginAt?: Timestamp | null;
 };
 
 export async function signUp({
