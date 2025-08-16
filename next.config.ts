@@ -1,10 +1,13 @@
 import { setupDevPlatform } from "@cloudflare/next-on-pages/next-dev";
+import type { NextConfig } from "next";
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {};
+const baseConfig: NextConfig = {};
 
-if (process.env.NODE_ENV === "development") {
-  await setupDevPlatform();
-}
+const isDev = process.env.NODE_ENV === "development";
 
-export default nextConfig;
+export default (async () => {
+  if (isDev) {
+    await setupDevPlatform();
+  }
+  return baseConfig;
+})();
