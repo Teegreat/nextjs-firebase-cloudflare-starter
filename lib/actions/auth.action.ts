@@ -47,7 +47,6 @@ export async function signUp({
         name,
         email,
         photoURL: user.photoURL ?? null,
-        provider: user.providerData[0]?.providerId ?? "password",
         createdAt: serverTimestamp(),
         lastLoginAt: serverTimestamp(),
       });
